@@ -18,15 +18,27 @@ model trolley_pendulum
   parameter Acceleration g=9.8 "Constant for gravitational acceleration on the surface of the Earth (not Newton's gravitational constant!!)";
   
   // Variables
-  Length x=0 "Displacement of the trolley/cart";
-  Velocity v=0 "Velocity of the trolley/cart";
-  AngularDisp tetha=0 "Angular displacement of the pendulum, w.r.t the trolley";
-  AngularVelo omega=0 "Angular velocity of the pendulum";
-  ControlSignal u=0 "Control signal to move the trolley and pendulum";
+  Length x "Displacement of the trolley/cart";
+  Velocity v "Velocity of the trolley/cart";
+  AngularDisp theta "Angular displacement of the pendulum, w.r.t the trolley";
+  AngularVelo omega "Angular velocity of the pendulum";
+  ControlSignal u "Control signal to move the trolley and pendulum";
+
+initial equation
+  x = 0;
+  v = 0;
+  theta = 0;
+  omega = 0;
 equation
   der(x) = v;
-  der(tetha) = omega;
-  der(v) = ( r*(d_c*v - m*(g*sin(tetha)*cos(tetha) + r*sin(tetha)*omega^2) - u) - (d_p*cos(tetha)*omega) ) / ( -r*(M+m*sin(tetha)^2) );
-  der(omega) = ( (d_p*omega*(m+M)) + (m^2*r^2*sin(tetha)*cos(tetha)*omega^2) + m*r*( (g*sin(tetha)*(m+M) + ( cos(tetha)*(u-d_c*v)))) ) / ( (m*r^2)*(-M-(m*sin(tetha)^2)) );
+  der(theta) = omega;
+  der(v) = ( r*(d_c*v - m*(g*sin(theta)*cos(theta) + r*sin(theta)*omega^2) - u) - (d_p*cos(theta)*omega) ) / ( -r*(M+m*sin(theta)^2) );
+  der(omega) = ( (d_p*omega*(m+M)) + (m^2*r^2*sin(theta)*cos(theta)*omega^2) + m*r*( (g*sin(theta)*(m+M) + ( cos(theta)*(u-d_c*v)))) ) / ( (m*r^2)*(-M-(m*sin(theta)^2)) );
+
+  if time < 0.5 then
+    u = 1000;
+  else
+    u = 0;
+  end if;
 
 end trolley_pendulum;
